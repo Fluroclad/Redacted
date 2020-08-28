@@ -1,9 +1,11 @@
 import os
+import discord
 
-from discord.ext import commands
 from dotenv import load_dotenv
+from discord.ext import commands
 
 from wow import *
+from util import *
 
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
@@ -37,7 +39,26 @@ async def get_character(ctx, character_name: str):
     
     if character == "not_found":
         await ctx.send("Character not found!")
+    
+    else:
+        print(character, flush = True)
 
-    await ctx.send(character)
+        class_data = await class_details(character["class"])
+        class_colour = class_data["colour"]
+        class_name = class_data["name"]
+        
+        msg = discord.Embed(
+            title = "%s" % (character["name"]),
+            colour = discord.Colour(class_colour),
+            description = "%s, %s - %s" % (character["level"], class_name, character["spec"])
+        )
+        msg.add_field(
+            name = "Character",
+            value = "**'Name':** '%s'\n**'Item Level':** '%s'"
+            % (character["name"], character["ilvl"]),
+            inline = True
+        )
+
+        await ctx.channel.send(embed=msg)
 
 bot.run(TOKEN)

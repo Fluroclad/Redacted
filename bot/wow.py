@@ -24,7 +24,7 @@ async def get_oauth_token():
                 json = await auth_response.json()
                 return json["access_token"]
 
-    except Exception as error:
+    except Exception:
         return "error_auth"
 
 # Fetch character data from WoW API
@@ -69,8 +69,9 @@ async def get_character_info(name):
         character_sheet = {
             "name": info["name"],
             "level": info["level"],
-            "class": info["character_class"]["name"],
-            "spec": info["active_spec"]["name"]
+            "class": info["character_class"]["id"],
+            "spec": info["active_spec"]["name"],
+            "ilvl": info["equipped_item_level"]
         }
 
     
