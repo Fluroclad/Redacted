@@ -2,5 +2,20 @@ version: "3"
 services: 
     discordbot:
         build: bot
+        volumes:
+            - "./bot:/bot/app"
+        working_dir: "/bot/app"
         env_file:
             - bot.env
+            - database.env
+        environment:
+            - POSTGRES_HOST=database
+            - POSTGRES_PORT=5432
+    database:
+        build: database
+        ports:
+            - "5432:5432"
+        env_file:
+            - database.env
+        volumes:
+            - ./database/data:/var/lib/postgresql/data
