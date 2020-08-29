@@ -19,7 +19,7 @@ bot = commands.Bot(command_prefix = "!r-")
 
 To start using this bot once all the preliminaries are set up. Be in the project directory and use this command if running for the first time or making changes to the dependencies of the container.
 ```
-docker-compose up -- build
+docker-compose up --build
 ```
 Or builds with only changes to the application itself (bot/database)
 ```
