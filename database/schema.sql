@@ -15,6 +15,5 @@ CREATE TABLE user_characters (
     main BOOLEAN NOT NULL,
     temporary BOOLEAN NOT NULL,
     PRIMARY KEY (discord_id, character_name),
-    UNIQUE (discord_id, main),
     FOREIGN KEY (discord_id) REFERENCES users (discord_id) ON UPDATE CASCADE
 );

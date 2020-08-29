@@ -71,17 +71,17 @@ async def add_character(ctx, character_name: str):
             inline = True
         )
 
-    await ctx.channel.send(embed=msg)
-
     db = Database()
     await db.connect(DATABASE_USER, DATABASE_PASS, DATABASE_HOST, DATABASE_PORT, DATABASE_NAME)
-    
     await db.set_cursor(False)
-    await db.add_character(ctx.author.id, character)
-    
+    result = await db.add_character(ctx.author.id, character)
     await db.exit()
 
-    await ctx.channel.send("Is this your character?")
+    if result == "character_exists":
+        await ctx.channel.send("Character already exists in database!")
+    else:
+        await ctx.channel.send(embed=msg)
+        await ctx.channel.send("Is this your character?")
 
 @bot.command( name = "confirm-character", help = "Add WoW charcter. Usage: !r-confirm-character <CharacterName> <y/n>")
 async def confirm_character(ctx, character_name: str, confirm: bool):

@@ -35,6 +35,8 @@ class Database:
         # Check if discord user id exists
         result = await self.user_exists(discord)
 
+        print(result, flush = True)
+
         if result == True:
             return True
         else:
@@ -50,7 +52,7 @@ class Database:
         try:
             self.cursor.execute("SELECT discord_id FROM users WHERE discord_id = %s", [discord])
             result = self.cursor.fetchone()
-            
+
             if result == None:
                 return False
             else:
@@ -64,6 +66,11 @@ class Database:
     async def add_character(self, discord, character):
         print(discord, flush = True)
         print(character, flush = True)
+
+        exists = await self.character_exists(character)
+
+        if exists == True:
+            return "character_exists"
 
         await self.add_user(discord)
 
@@ -83,6 +90,20 @@ class Database:
         except Exception as e:
             print(e, flush = True)
             self.connection.rollback()
+
+    # Check character exists
+    async def character_exists(self, character):
+        try:
+            self.cursor.execute("SELECT character_name FROM user_characters WHERE character_name = %s", [character["name"]])
+            result = self.cursor.fetchone()
+
+            if result == None:
+                return False
+            else:
+                return True
+
+        except Exception as e:
+            print(e, flush = True)
 
     # Clean up resources
     async def exit(self):
